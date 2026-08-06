@@ -71,3 +71,94 @@ function renderQuestion() {
             : "inline-block";
 
 }
+/* ==========================================
+   ATTACH OPTION EVENTS
+========================================== */
+
+function attachOptionEvents() {
+
+    const labels =
+        document.querySelectorAll(".option");
+
+    labels.forEach(label => {
+
+        const input =
+            label.querySelector("input");
+
+        label.addEventListener("click", () => {
+
+            const question =
+                questions[currentQuestion];
+
+            if (question.type === "radio") {
+
+                labels.forEach(l =>
+                    l.classList.remove("selected"));
+
+                label.classList.add("selected");
+
+                input.checked = true;
+
+            }
+
+            else {
+
+                input.checked = !input.checked;
+
+                label.classList.toggle(
+                    "selected",
+                    input.checked
+                );
+
+            }
+
+            saveCurrentAnswer();
+
+        });
+
+    });
+
+}
+/* ==========================================
+   SAVE CURRENT ANSWER
+========================================== */
+
+function saveCurrentAnswer() {
+
+    const question =
+        questions[currentQuestion];
+
+    if (question.type === "radio") {
+
+        const selected =
+            document.querySelector(
+                `input[name="question${question.id}"]:checked`
+            );
+
+        if (selected) {
+
+            answers[question.id] =
+                selected.value;
+
+        }
+
+    }
+
+    else {
+
+        answers[question.id] = [];
+
+        document
+            .querySelectorAll(
+                `input[name="question${question.id}"]:checked`
+            )
+            .forEach(input => {
+
+                answers[question.id]
+                    .push(input.value);
+
+            });
+
+    }
+
+}
