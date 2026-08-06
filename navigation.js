@@ -1,103 +1,123 @@
 /* ==========================================
    NATURAL DIADEM
-   NAVIGATION
+   PROGRAM FIT ASSESSMENT
+   NAVIGATION.JS
 ========================================== */
 
-/*
-----------------------------------------------
-NEXT QUESTION
-----------------------------------------------
-*/
+"use strict";
 
-function nextQuestion() {
+/* ==========================================
+   NEXT QUESTION
+========================================== */
 
-    saveCurrentAnswer();
-
-    if (!validateAnswer()) {
-
-        alert("Please answer this question before continuing.");
-
+function goToNextQuestion() {
+    if (!validateCurrentQuestion()) {
         return;
-
     }
 
-    if (currentQuestion < questions.length - 1) {
+    const isLastQuestion =
+        assessmentState.currentQuestionIndex ===
+        questions.length - 1;
 
-        currentQuestion++;
-
-        renderQuestion();
-
+    if (isLastQuestion) {
+        openReviewScreen();
+        return;
     }
 
-    else {
+    assessmentState.currentQuestionIndex += 1;
 
-        showReview();
+    renderQuestion();
 
-    }
-
+    scrollToTop();
 }
 
-/*
-----------------------------------------------
-PREVIOUS QUESTION
-----------------------------------------------
-*/
+/* ==========================================
+   PREVIOUS QUESTION
+========================================== */
 
-function previousQuestion() {
-
-    saveCurrentAnswer();
-
-    if (currentQuestion > 0) {
-
-        currentQuestion--;
-
-        renderQuestion();
-
+function goToPreviousQuestion() {
+    if (assessmentState.currentQuestionIndex <= 0) {
+        return;
     }
 
+    assessmentState.currentQuestionIndex -= 1;
+
+    renderQuestion();
+
+    scrollToTop();
 }
 
-/*
-----------------------------------------------
-VALIDATE ANSWER
-----------------------------------------------
-*/
+/* ==========================================
+   OPEN REVIEW
+========================================== */
 
-function validateAnswer() {
+function openReviewScreen() {
+    showReviewScreen();
 
-    const question = questions[currentQuestion];
+    if (typeof renderReview === "function") {
+        renderReview();
+    }
+}
 
-    if (question.type === "radio") {
+/* ==========================================
+   RETURN FROM REVIEW
+========================================== */
 
-        return answers[question.id] !== undefined;
+function returnToAssessment() {
+    assessmentState.currentQuestionIndex =
+        questions.length - 1;
 
+    showAssessmentScreen();
+
+    renderQuestion();
+}
+
+/* ==========================================
+   EDIT SPECIFIC QUESTION
+========================================== */
+
+function editQuestion(questionIndex) {
+    if (
+        questionIndex < 0 ||
+        questionIndex >= questions.length
+    ) {
+        return;
     }
 
-    if (question.type === "checkbox") {
+    assessmentState.currentQuestionIndex =
+        questionIndex;
 
-        return (
-            answers[question.id] &&
-            answers[question.id].length > 0
-        );
+    showAssessmentScreen();
 
-    }
-
-    return true;
-
+    renderQuestion();
 }
 
-/*
-----------------------------------------------
-SHOW REVIEW SCREEN
-----------------------------------------------
-*/
+/* ==========================================
+   BUTTON EVENTS
+========================================== */
 
-function showReview() {
+function initializeNavigation() {
+    previousButton.addEventListener(
+        "click",
+        goToPreviousQuestion
+    );
 
-    assessment.classList.add("hidden");
+    nextButton.addEventListener(
+        "click",
+        goToNextQuestion
+    );
 
-    reviewScreen.classList.remove("hidden");
-
-    buildReview();
-
+    editButton.addEventListener(
+        "click",
+        returnToAssessment
+    );
 }
+
+/* ==========================================
+   INITIALIZATION
+========================================== */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    initializeNavigation
+);
