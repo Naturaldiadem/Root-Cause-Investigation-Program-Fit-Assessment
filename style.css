@@ -616,3 +616,46 @@ opacity:.4;
 pointer-events:none;
 
 }
+/* =========================
+   REVIEW PAGE
+========================= */
+
+.review-item{
+
+padding:25px 0;
+
+}
+
+.review-question{
+
+font-size:20px;
+
+color:var(--purple);
+
+margin-bottom:10px;
+
+font-family:'Playfair Display',serif;
+
+}
+
+.review-answer{
+
+font-size:18px;
+
+line-height:1.7;
+
+color:#555;
+
+margin-bottom:20px;
+
+}
+
+.review-item hr{
+
+border:none;
+
+border-top:1px solid #E8E8E8;
+
+margin-top:20px;
+
+}
