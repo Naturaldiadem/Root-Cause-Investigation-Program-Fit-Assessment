@@ -1,164 +1,371 @@
 /* ==========================================
    NATURAL DIADEM
-   RENDER QUESTIONS
+   PROGRAM FIT ASSESSMENT
+   RENDER.JS
+========================================== */
+
+"use strict";
+
+/* ==========================================
+   QUESTION RENDERING
 ========================================== */
 
 function renderQuestion() {
+    const question = getCurrentQuestion();
 
-    updateProgress();
+    if (!question) {
+        return;
+    }
 
-    const question = questions[currentQuestion];
+    questionContainer.innerHTML = "";
 
-    let html = `
-        <div class="question-title">
-            ${question.title}
-        </div>
-    `;
+    updateProgressDisplay(question);
+    updateNavigationDisplay();
+
+    const questionCard = document.createElement("div");
+    questionCard.className = "question-card";
+
+    const questionHeader = document.createElement("div");
+    questionHeader.className = "question-header";
+
+    const questionTitle = document.createElement("h2");
+    questionTitle.className = "question-title";
+    questionTitle.textContent = question.title;
+
+    questionHeader.appendChild(questionTitle);
 
     if (question.subtitle) {
-        html += `
-            <div class="question-subtitle">
-                ${question.subtitle}
-            </div>
-        `;
+        const questionSubtitle = document.createElement("p");
+        questionSubtitle.className = "question-subtitle";
+        questionSubtitle.textContent = question.subtitle;
+
+        questionHeader.appendChild(questionSubtitle);
     }
 
-    html += `<div class="options">`;
+    questionCard.appendChild(questionHeader);
 
-    question.options.forEach((option, index) => {
+    const optionsContainer = document.createElement("div");
+    optionsContainer.className = "options-container";
 
-        let checked = false;
+    question.options.forEach(function (option, optionIndex) {
+        const optionElement = createOptionElement(
+            question,
+            option,
+            optionIndex
+        );
 
-        if (question.type === "radio") {
-
-            checked = answers[question.id] === option;
-
-        } else {
-
-            checked =
-                answers[question.id] &&
-                answers[question.id].includes(option);
-
-        }
-
-        html += `
-
-        <label class="option ${checked ? "selected" : ""}">
-
-            <input
-                type="${question.type}"
-                name="question${question.id}"
-                value="${option}"
-                ${checked ? "checked" : ""}>
-
-            ${option}
-
-        </label>
-
-        `;
-
+        optionsContainer.appendChild(optionElement);
     });
 
-    html += `</div>`;
+    questionCard.appendChild(optionsContainer);
+    questionContainer.appendChild(questionCard);
 
-    questionContainer.innerHTML = html;
-
-    attachOptionEvents();
-
-    previousBtn.style.display =
-        currentQuestion === 0
-            ? "none"
-            : "inline-block";
-
+    focusFirstOption();
 }
+
 /* ==========================================
-   ATTACH OPTION EVENTS
+   OPTION CREATION
 ========================================== */
 
-function attachOptionEvents() {
+function createOptionElement(question, option, optionIndex) {
+    const optionLabel = document.createElement("label");
+    optionLabel.className = "option";
 
-    const labels =
-        document.querySelectorAll(".option");
+    const optionInput = document.createElement("input");
 
-    labels.forEach(label => {
+    optionInput.type = question.type;
+    optionInput.name = "question-" + question.id;
+    optionInput.value = option;
+    optionInput.id =
+        "question-" +
+        question.id +
+        "-option-" +
+        optionIndex;
 
-        const input =
-            label.querySelector("input");
+    if (isOptionSelected(question, option)) {
+        optionInput.checked = true;
+        optionLabel.classList.add("selected");
+    }
 
-        label.addEventListener("click", () => {
+    const optionText = document.createElement("span");
+    optionText.className = "option-text";
+    optionText.textContent = option;
 
-            const question =
-                questions[currentQuestion];
+    optionLabel.appendChild(optionInput);
+    optionLabel.appendChild(optionText);
 
-            if (question.type === "radio") {
-
-                labels.forEach(l =>
-                    l.classList.remove("selected"));
-
-                label.classList.add("selected");
-
-                input.checked = true;
-
-            }
-
-            else {
-
-                input.checked = !input.checked;
-
-                label.classList.toggle(
-                    "selected",
-                    input.checked
-                );
-
-            }
-
-            saveCurrentAnswer();
-
-        });
-
+    optionInput.addEventListener("change", function () {
+        handleOptionChange(
+            question,
+            option,
+            optionInput,
+            optionLabel
+        );
     });
 
+    return optionLabel;
 }
+
 /* ==========================================
-   SAVE CURRENT ANSWER
+   SELECTED STATE
 ========================================== */
 
-function saveCurrentAnswer() {
+function isOptionSelected(question, option) {
+    const savedAnswer = getAnswer(question.id);
 
-    const question =
-        questions[currentQuestion];
+    if (question.type === "checkbox") {
+        return (
+            Array.isArray(savedAnswer) &&
+            savedAnswer.includes(option)
+        );
+    }
+
+    return savedAnswer === option;
+}
+
+/* ==========================================
+   OPTION CHANGE HANDLING
+========================================== */
+
+function handleOptionChange(
+    question,
+    option,
+    optionInput,
+    optionLabel
+) {
+    clearValidationMessage();
 
     if (question.type === "radio") {
+        handleRadioSelection(
+            question,
+            option,
+            optionInput
+        );
 
-        const selected =
-            document.querySelector(
-                `input[name="question${question.id}"]:checked`
+        updateSelectedOptionStyles();
+
+        return;
+    }
+
+    handleCheckboxSelection(
+        question,
+        option,
+        optionInput
+    );
+
+    updateSelectedOptionStyles();
+}
+
+/* ==========================================
+   RADIO ANSWERS
+========================================== */
+
+function handleRadioSelection(
+    question,
+    option,
+    optionInput
+) {
+    if (!optionInput.checked) {
+        return;
+    }
+
+    saveAnswer(question.id, option);
+}
+
+/* ==========================================
+   CHECKBOX ANSWERS
+========================================== */
+
+function handleCheckboxSelection(
+    question,
+    option,
+    optionInput
+) {
+    let selectedAnswers = getAnswer(question.id);
+
+    if (!Array.isArray(selectedAnswers)) {
+        selectedAnswers = [];
+    }
+
+    const exclusiveOptions = [
+        "None of the above",
+        "None of these",
+        "I haven't tried anything yet"
+    ];
+
+    const isExclusiveOption =
+        exclusiveOptions.includes(option);
+
+    if (optionInput.checked) {
+        if (isExclusiveOption) {
+            selectedAnswers = [option];
+
+            uncheckOtherOptions(option);
+        } else {
+            selectedAnswers = selectedAnswers.filter(
+                function (selectedOption) {
+                    return !exclusiveOptions.includes(
+                        selectedOption
+                    );
+                }
             );
 
-        if (selected) {
+            uncheckExclusiveOptions(exclusiveOptions);
 
-            answers[question.id] =
-                selected.value;
-
+            if (!selectedAnswers.includes(option)) {
+                selectedAnswers.push(option);
+            }
         }
-
+    } else {
+        selectedAnswers = selectedAnswers.filter(
+            function (selectedOption) {
+                return selectedOption !== option;
+            }
+        );
     }
 
-    else {
+    if (selectedAnswers.length > 0) {
+        saveAnswer(question.id, selectedAnswers);
+    } else {
+        removeAnswer(question.id);
+    }
+}
 
-        answers[question.id] = [];
+/* ==========================================
+   CHECKBOX EXCLUSIVITY
+========================================== */
 
-        document
-            .querySelectorAll(
-                `input[name="question${question.id}"]:checked`
-            )
-            .forEach(input => {
+function uncheckOtherOptions(selectedOption) {
+    const inputs = questionContainer.querySelectorAll(
+        'input[type="checkbox"]'
+    );
 
-                answers[question.id]
-                    .push(input.value);
+    inputs.forEach(function (input) {
+        if (input.value !== selectedOption) {
+            input.checked = false;
+        }
+    });
+}
 
-            });
+function uncheckExclusiveOptions(exclusiveOptions) {
+    const inputs = questionContainer.querySelectorAll(
+        'input[type="checkbox"]'
+    );
 
+    inputs.forEach(function (input) {
+        if (exclusiveOptions.includes(input.value)) {
+            input.checked = false;
+        }
+    });
+}
+
+/* ==========================================
+   OPTION VISUAL STATE
+========================================== */
+
+function updateSelectedOptionStyles() {
+    const options = questionContainer.querySelectorAll(
+        ".option"
+    );
+
+    options.forEach(function (optionLabel) {
+        const input = optionLabel.querySelector("input");
+
+        if (input && input.checked) {
+            optionLabel.classList.add("selected");
+        } else {
+            optionLabel.classList.remove("selected");
+        }
+    });
+}
+
+/* ==========================================
+   PROGRESS DISPLAY
+========================================== */
+
+function updateProgressDisplay(question) {
+    const totalSections = getTotalSections();
+    const currentQuestionNumber =
+        assessmentState.currentQuestionIndex + 1;
+    const totalQuestions = questions.length;
+    const progressPercentage =
+        (currentQuestionNumber / totalQuestions) * 100;
+
+    sectionLabel.textContent =
+        "Section " +
+        question.section +
+        " of " +
+        totalSections;
+
+    sectionTitle.textContent =
+        question.sectionTitle;
+
+    questionNumber.textContent =
+        "Question " +
+        currentQuestionNumber +
+        " of " +
+        totalQuestions;
+
+    progressFill.style.width =
+        progressPercentage + "%";
+
+    progressFill.setAttribute(
+        "aria-valuenow",
+        String(Math.round(progressPercentage))
+    );
+
+    progressFill.setAttribute(
+        "aria-valuemin",
+        "0"
+    );
+
+    progressFill.setAttribute(
+        "aria-valuemax",
+        "100"
+    );
+}
+
+/* ==========================================
+   NAVIGATION DISPLAY
+========================================== */
+
+function updateNavigationDisplay() {
+    const isFirstQuestion =
+        assessmentState.currentQuestionIndex === 0;
+
+    const isLastQuestion =
+        assessmentState.currentQuestionIndex ===
+        questions.length - 1;
+
+    previousButton.disabled = isFirstQuestion;
+
+    previousButton.classList.toggle(
+        "hidden",
+        isFirstQuestion
+    );
+
+    nextButton.textContent =
+        isLastQuestion
+            ? "Review Responses"
+            : "Next";
+}
+
+/* ==========================================
+   ACCESSIBILITY
+========================================== */
+
+function focusFirstOption() {
+    const firstInput = questionContainer.querySelector(
+        "input"
+    );
+
+    if (!firstInput) {
+        return;
     }
 
+    window.setTimeout(function () {
+        firstInput.focus({
+            preventScroll: true
+        });
+    }, 100);
 }
