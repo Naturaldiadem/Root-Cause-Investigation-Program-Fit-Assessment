@@ -21,23 +21,24 @@ const assessmentResults = {
         title: "The Root Cause Investigation Program May Be a Strong Fit",
 
         message:
-            "Based on your responses, you appear ready for a deeper, personalized investigation into the factors that may be contributing to your hair and scalp concerns.",
+            "Based on your responses, the Root Cause Investigation Program may be an appropriate next step for you.",
 
         details: [
-            "You are looking for more than a temporary product-based solution.",
-            "You are open to exploring connections between your hair, scalp, and overall health.",
-            "You appear willing to make meaningful changes based on what the investigation uncovers.",
-            "You are interested in understanding why your concerns may be happening."
+            "You are interested in understanding why your hair or scalp concerns may be happening.",
+            "You appear open to looking beyond products and investigating possible contributing factors.",
+            "You are willing to consider meaningful lifestyle changes if they may be connected to your concerns.",
+            "You indicated that you are ready to take the next step and apply."
         ],
 
         nextStepTitle: "Your Recommended Next Step",
 
         nextStepText:
-            "Complete the Root Cause Investigation Program Pre-Qualification Application. Your application will be reviewed to determine whether the program can appropriately support your concerns, goals, and location.",
+            "Complete the Root Cause Investigation Program Pre-Qualification Application. Your responses will be reviewed to determine whether the program can appropriately support your concerns, goals, and location.",
 
-        buttonText: "Apply for the Program",
+        buttonText: "Complete the Pre-Qualification Application",
 
-        buttonUrl: "#"
+        buttonUrl:
+            "https://jnique-smith.mykajabi.com/root-cause-investigation-pre-qual"
 
     },
 
@@ -47,51 +48,52 @@ const assessmentResults = {
 
         eyebrow: "Your Personalized Recommendation",
 
-        title: "You May Be a Fit, but Learning More Is Your Best Next Step",
+        title: "Learning More Is Your Best Next Step",
 
         message:
-            "Your responses suggest that a root cause approach may be relevant to your concerns, but you may need more information before deciding whether the Root Cause Investigation Program is right for you.",
+            "Your responses suggest that a root cause approach may be relevant to your hair or scalp concerns, but you indicated that you would like to learn more before applying.",
 
         details: [
-            "You are beginning to consider that your hair or scalp concerns may involve more than products alone.",
-            "You may still be exploring how internal health patterns can affect hair and scalp health.",
-            "You appear interested in answers, but may not yet feel ready to apply.",
-            "Learning more about the investigation process can help you make an informed decision."
+            "You may be beginning to wonder whether something beyond your hair or scalp could be contributing.",
+            "You may want a clearer understanding of how hair, scalp, and body signals can be connected.",
+            "You do not need to apply before you feel ready.",
+            "Learning more can help you decide whether a deeper investigation is the right next step for you."
         ],
 
         nextStepTitle: "Your Recommended Next Step",
 
         nextStepText:
-            "Review the program information before applying. Pay close attention to how the investigation works, what may be required from you, and the type of support the program provides.",
+            "Read A Letter From Your Scalp. It will help you understand why hair and scalp changes may be part of a larger conversation happening throughout the body.",
 
-        buttonText: "Learn More About the Program",
+        buttonText: "Read A Letter From Your Scalp",
 
-        buttonUrl: "#"
+        buttonUrl:
+            "https://jnique-smith.mykajabi.com/scalp-letter-opt-in"
 
     },
 
-    otherSupport: {
+    medicalCare: {
 
-        key: "other-support",
+        key: "medical-care",
 
         eyebrow: "Your Personalized Recommendation",
 
-        title: "Another Type of Support May Be More Appropriate Right Now",
+        title: "Medical Care Is the Appropriate Next Step",
 
         message:
-            "Based on your responses, the Root Cause Investigation Program may not be the most appropriate next step for you at this time.",
+            "You indicated that you are looking for immediate medical treatment or emergency care. The Root Cause Investigation Program is not designed to provide emergency evaluation, diagnosis, or immediate medical treatment.",
 
         details: [
-            "The program is not designed to provide emergency care or immediate medical treatment.",
-            "It is not a quick-fix or product-recommendation service.",
-            "The investigation process requires time, participation, and a willingness to explore possible contributing factors.",
-            "You may benefit from addressing your immediate needs with an appropriate licensed medical provider first."
+            "Contact an appropriate licensed medical provider for evaluation.",
+            "Seek urgent or emergency care if your symptoms are sudden, severe, rapidly worsening, or feel life-threatening.",
+            "Do not delay medical care while waiting to complete an educational program or assessment.",
+            "The Root Cause Investigation Program may be considered later, after your immediate medical needs have been addressed."
         ],
 
         nextStepTitle: "Your Recommended Next Step",
 
         nextStepText:
-            "Contact a qualified medical professional for evaluation, especially if your symptoms are sudden, severe, rapidly worsening, or require immediate attention.",
+            "Contact your medical provider, an urgent care center, or emergency services based on the severity of your symptoms.",
 
         buttonText: "",
 
@@ -106,10 +108,10 @@ const assessmentResults = {
 ========================================== */
 
 function calculateAssessmentResult() {
+
     let fitScore = 0;
     let readinessScore = 0;
     let quickFixScore = 0;
-    let medicalCareFlag = false;
 
     const answer1 = getAnswer(1) || [];
     const answer2 = getAnswer(2) || "";
@@ -120,6 +122,24 @@ function calculateAssessmentResult() {
     const answer7 = getAnswer(7) || [];
     const answer8 = getAnswer(8) || "";
     const answer9 = getAnswer(9) || "";
+
+    /* ==========================================
+       QUESTION 9 ROUTING
+    ========================================== */
+
+    if (
+        answer9 ===
+        "I'm looking for immediate medical treatment or emergency care."
+    ) {
+        return assessmentResults.medicalCare;
+    }
+
+    if (
+        answer9 ===
+        "I'm interested but I'd like to learn more first."
+    ) {
+        return assessmentResults.learnMore;
+    }
 
     /* ==========================================
        QUESTION 1
@@ -142,9 +162,7 @@ function calculateAssessmentResult() {
         answer2 === "More than 1 year"
     ) {
         fitScore += 2;
-    }
-
-    if (
+    } else if (
         answer2 === "3–6 months"
     ) {
         fitScore += 1;
@@ -156,16 +174,17 @@ function calculateAssessmentResult() {
 
     if (
         Array.isArray(answer3) &&
-        answer3.length >= 2 &&
-        !answer3.includes("I haven't tried anything yet")
+        answer3.includes("I haven't tried anything yet")
+    ) {
+        fitScore += 0;
+    } else if (
+        Array.isArray(answer3) &&
+        answer3.length >= 2
     ) {
         fitScore += 2;
-    }
-
-    if (
+    } else if (
         Array.isArray(answer3) &&
-        answer3.length === 1 &&
-        !answer3.includes("I haven't tried anything yet")
+        answer3.length === 1
     ) {
         fitScore += 1;
     }
@@ -175,17 +194,24 @@ function calculateAssessmentResult() {
     ========================================== */
 
     if (
-        answer4 === "Nothing changed" ||
-        answer4 === "Things improved temporarily" ||
-        answer4 === "My symptoms continued to worsen"
+        answer4 ===
+        "Nothing changed after trying those approaches." ||
+        answer4 ===
+        "Things improved temporarily." ||
+        answer4 ===
+        "My symptoms continued to worsen."
     ) {
         fitScore += 2;
-    }
-
-    if (
-        answer4 === "I'm still not sure what's causing it"
+    } else if (
+        answer4 ===
+        "I tried different approaches, but I'm still not sure what's causing the problem."
     ) {
-        fitScore += 1;
+        fitScore += 2;
+    } else if (
+        answer4 ===
+        "I haven't tried any approaches yet."
+    ) {
+        fitScore += 0;
     }
 
     /* ==========================================
@@ -206,23 +232,19 @@ function calculateAssessmentResult() {
 
     if (
         answer6 ===
-        "I'm convinced my body is connected to what's happening with my hair."
+        "I'm convinced my body is connected to what's happening with my hair or scalp."
     ) {
         fitScore += 3;
         readinessScore += 2;
-    }
-
-    if (
+    } else if (
         answer6 ===
-        "I've started wondering if something inside my body could be contributing."
+        "I've started wondering if something inside my body could be contributing to my hair or scalp concerns."
     ) {
         fitScore += 2;
         readinessScore += 1;
-    }
-
-    if (
+    } else if (
         answer6 ===
-        "I believe my hair problem is only about my hair."
+        "I believe my hair or scalp problem is only about my hair or scalp."
     ) {
         quickFixScore += 2;
     }
@@ -253,7 +275,7 @@ function calculateAssessmentResult() {
     if (
         Array.isArray(answer7) &&
         answer7.includes(
-            "I want long-term improvement in my overall health."
+            "I want long-term improvement in my hair and scalp health."
         )
     ) {
         fitScore += 2;
@@ -279,17 +301,13 @@ function calculateAssessmentResult() {
     ) {
         readinessScore += 4;
         fitScore += 3;
-    }
-
-    if (
+    } else if (
         answer8 ===
         "I'm open to small changes."
     ) {
         readinessScore += 2;
         fitScore += 1;
-    }
-
-    if (
+    } else if (
         answer8 ===
         "I'm only looking for a quick fix."
     ) {
@@ -308,33 +326,22 @@ function calculateAssessmentResult() {
         fitScore += 2;
     }
 
-    if (
-        answer9 ===
-        "I'm interested but I'd like to learn more first."
-    ) {
-        readinessScore += 1;
-    }
-
-    if (
-        answer9 ===
-        "I'm looking for immediate medical treatment or emergency care."
-    ) {
-        medicalCareFlag = true;
-    }
-
     /* ==========================================
        FINAL RESULT
     ========================================== */
 
-    if (medicalCareFlag) {
-        return assessmentResults.otherSupport;
+    if (
+        answer9 ===
+        "I'm ready to apply for the Root Cause Investigation Program."
+    ) {
+        return assessmentResults.ready;
     }
 
     if (
         quickFixScore >= 5 ||
         fitScore < 6
     ) {
-        return assessmentResults.otherSupport;
+        return assessmentResults.learnMore;
     }
 
     if (
@@ -352,6 +359,7 @@ function calculateAssessmentResult() {
 ========================================== */
 
 function renderResults(result) {
+
     resultsContent.innerHTML = "";
 
     if (!result) {
@@ -359,18 +367,22 @@ function renderResults(result) {
     }
 
     const resultWrapper = document.createElement("div");
+
     resultWrapper.className =
         "result-wrapper result-" + result.key;
 
     const eyebrow = document.createElement("p");
+
     eyebrow.className = "result-eyebrow";
     eyebrow.textContent = result.eyebrow;
 
     const title = document.createElement("h2");
+
     title.className = "result-title";
     title.textContent = result.title;
 
     const message = document.createElement("p");
+
     message.className = "result-message";
     message.textContent = result.message;
 
@@ -382,29 +394,38 @@ function renderResults(result) {
         Array.isArray(result.details) &&
         result.details.length > 0
     ) {
+
         const detailsBox = document.createElement("div");
+
         detailsBox.className = "result-details";
 
         const detailsList = document.createElement("ul");
 
         result.details.forEach(function (detail) {
+
             const detailItem = document.createElement("li");
+
             detailItem.textContent = detail;
 
             detailsList.appendChild(detailItem);
+
         });
 
         detailsBox.appendChild(detailsList);
         resultWrapper.appendChild(detailsBox);
+
     }
 
     const nextStepBox = document.createElement("div");
+
     nextStepBox.className = "result-next-step";
 
     const nextStepTitle = document.createElement("h3");
+
     nextStepTitle.textContent = result.nextStepTitle;
 
     const nextStepText = document.createElement("p");
+
     nextStepText.textContent = result.nextStepText;
 
     nextStepBox.appendChild(nextStepTitle);
@@ -414,6 +435,7 @@ function renderResults(result) {
         result.buttonText &&
         result.buttonUrl
     ) {
+
         const resultButton = document.createElement("a");
 
         resultButton.className = "result-button";
@@ -421,11 +443,13 @@ function renderResults(result) {
         resultButton.textContent = result.buttonText;
 
         nextStepBox.appendChild(resultButton);
+
     }
 
     resultWrapper.appendChild(nextStepBox);
 
     const disclaimer = document.createElement("div");
+
     disclaimer.className = "result-disclaimer";
 
     const disclaimerText = document.createElement("p");
@@ -434,6 +458,7 @@ function renderResults(result) {
         "This assessment provides an educational recommendation only. It does not diagnose, treat, cure, or prevent any medical condition and does not replace medical advice.";
 
     disclaimer.appendChild(disclaimerText);
+
     resultWrapper.appendChild(disclaimer);
 
     const restartButton = document.createElement("button");
@@ -442,13 +467,18 @@ function renderResults(result) {
     restartButton.className = "secondary restart-btn";
     restartButton.textContent = "Retake Assessment";
 
-    restartButton.addEventListener("click", restartAssessment);
+    restartButton.addEventListener(
+        "click",
+        restartAssessment
+    );
 
     resultWrapper.appendChild(restartButton);
+
     resultsContent.appendChild(resultWrapper);
 
     submitButton.disabled = false;
     submitButton.textContent = "Submit Assessment";
+
 }
 
 /* ==========================================
@@ -456,6 +486,7 @@ function renderResults(result) {
 ========================================== */
 
 function restartAssessment() {
+
     assessmentState.currentQuestionIndex = 0;
     assessmentState.answers = {};
     assessmentState.submitted = false;
@@ -467,4 +498,5 @@ function restartAssessment() {
     submitButton.textContent = "Submit Assessment";
 
     showWelcomeScreen();
+
 }
