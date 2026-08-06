@@ -107,6 +107,8 @@ options:[
 
 "Visited a cosmetologist",
 
+"I've tried another approach that is not listed here",
+
 "I haven't tried anything yet"
 
 ]
@@ -121,19 +123,21 @@ section:2,
 
 sectionTitle:"Your Journey So Far",
 
-title:"What happened after trying those approaches?",
+title:"Which statement best describes your experience so far?",
 
 type:"radio",
 
 options:[
 
-"Nothing changed",
+"Nothing changed after trying those approaches.",
 
-"Things improved temporarily",
+"Things improved temporarily.",
 
-"My symptoms continued to worsen",
+"My symptoms continued to worsen.",
 
-"I'm still not sure what's causing it"
+"I tried different approaches, but I'm still not sure what's causing the problem.",
+
+"I haven't tried any approaches yet."
 
 ]
 
@@ -159,7 +163,9 @@ type:"checkbox",
 
 options:[
 
-"Digestive problems",
+"Constipation, diarrhea, or changes in bowel movements",
+
+"Bloating",
 
 "Low energy or fatigue",
 
@@ -167,15 +173,13 @@ options:[
 
 "Difficulty sleeping",
 
-"Hormonal changes",
+"Headaches or migraines",
 
 "Painful or heavy menstrual cycles",
 
 "Skin issues",
 
 "Joint pain",
-
-"Food sensitivities",
 
 "None of these"
 
@@ -197,11 +201,11 @@ type:"radio",
 
 options:[
 
-"I believe my hair problem is only about my hair.",
+"I believe my hair or scalp problem is only about my hair or scalp.",
 
-"I've started wondering if something inside my body could be contributing.",
+"I've started wondering if something inside my body could be contributing to my hair or scalp concerns.",
 
-"I'm convinced my body is connected to what's happening with my hair."
+"I'm convinced my body is connected to what's happening with my hair or scalp."
 
 ]
 
@@ -227,7 +231,7 @@ options:[
 
 "I want a personalized investigation into my hair and scalp concerns.",
 
-"I want long-term improvement in my overall health.",
+"I want long-term improvement in my hair and scalp health.",
 
 "I'm mainly looking for a product recommendation."
 
