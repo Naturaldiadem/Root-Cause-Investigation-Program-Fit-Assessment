@@ -592,3 +592,27 @@ width:170px;
 }
 
 }
+
+.option input{
+
+display:none;
+
+}
+
+.option.selected{
+
+border-color:var(--gold);
+
+background:#FFF7E6;
+
+box-shadow:0 8px 18px rgba(201,160,83,.20);
+
+}
+
+.option.disabled{
+
+opacity:.4;
+
+pointer-events:none;
+
+}
