@@ -1,13 +1,20 @@
 /* ==========================================
-   NATURAL DIADEM
-   PROGRAM FIT ASSESSMENT
-   RESULTS.JS
+NATURAL DIADEM
+PROGRAM FIT ASSESSMENT
+RESULTS.JS
 ========================================== */
 
 "use strict";
 
 /* ==========================================
-   RESULT TYPES
+CONSULTATION CHECKOUT
+========================================== */
+
+const PROGRAM_FIT_CONSULTATION_URL =
+    "https://jnique-smith.mykajabi.com/offers/uW6J6iqY";
+
+/* ==========================================
+RESULT TYPES
 ========================================== */
 
 const assessmentResults = {
@@ -38,7 +45,19 @@ const assessmentResults = {
         buttonText: "Complete the Pre-Qualification Application",
 
         buttonUrl:
-            "https://jnique-smith.mykajabi.com/root-cause-investigation-pre-qual"
+            "https://jnique-smith.mykajabi.com/root-cause-investigation-pre-qual",
+
+        consultationTitle:
+            "Prefer to Talk With J'Nique First?",
+
+        consultationText:
+            "If you would like to discuss your concerns before completing the Pre-Qualification Application, you can book a private 30-minute Program Fit Consultation for $107. This consultation is designed to help determine whether the Root Cause Investigation Program may be the right next step for you.",
+
+        consultationButtonText:
+            "Book a 30-Minute Consultation",
+
+        consultationButtonUrl:
+            PROGRAM_FIT_CONSULTATION_URL
 
     },
 
@@ -68,7 +87,19 @@ const assessmentResults = {
         buttonText: "Read A Letter From Your Scalp",
 
         buttonUrl:
-            "https://jnique-smith.mykajabi.com/scalp-letter-opt-in"
+            "https://jnique-smith.mykajabi.com/scalp-letter-opt-in",
+
+        consultationTitle:
+            "Would You Rather Talk It Through?",
+
+        consultationText:
+            "If you are not sure whether the Root Cause Investigation Program fits what you are experiencing, you can book a private 30-minute Program Fit Consultation with J'Nique for $107. You'll have an opportunity to discuss your concerns, ask questions, and determine whether the program may be an appropriate next step.",
+
+        consultationButtonText:
+            "Book a 30-Minute Consultation",
+
+        consultationButtonUrl:
+            PROGRAM_FIT_CONSULTATION_URL
 
     },
 
@@ -104,7 +135,7 @@ const assessmentResults = {
 };
 
 /* ==========================================
-   SCORING
+SCORING
 ========================================== */
 
 function calculateAssessmentResult() {
@@ -355,7 +386,7 @@ function calculateAssessmentResult() {
 }
 
 /* ==========================================
-   RESULTS RENDERING
+RESULTS RENDERING
 ========================================== */
 
 function renderResults(result) {
@@ -416,6 +447,10 @@ function renderResults(result) {
 
     }
 
+    /* ==========================================
+       PRIMARY NEXT STEP
+    ========================================== */
+
     const nextStepBox = document.createElement("div");
 
     nextStepBox.className = "result-next-step";
@@ -448,6 +483,69 @@ function renderResults(result) {
 
     resultWrapper.appendChild(nextStepBox);
 
+    /* ==========================================
+       OPTIONAL PROGRAM FIT CONSULTATION
+    ========================================== */
+
+    if (
+        result.consultationTitle &&
+        result.consultationText &&
+        result.consultationButtonText &&
+        result.consultationButtonUrl
+    ) {
+
+        const consultationBox =
+            document.createElement("div");
+
+        consultationBox.className =
+            "result-consultation";
+
+        const consultationTitle =
+            document.createElement("h3");
+
+        consultationTitle.textContent =
+            result.consultationTitle;
+
+        const consultationText =
+            document.createElement("p");
+
+        consultationText.textContent =
+            result.consultationText;
+
+        const consultationButton =
+            document.createElement("a");
+
+        consultationButton.className =
+            "result-button consultation-button";
+
+        consultationButton.href =
+            result.consultationButtonUrl;
+
+        consultationButton.textContent =
+            result.consultationButtonText;
+
+        consultationBox.appendChild(
+            consultationTitle
+        );
+
+        consultationBox.appendChild(
+            consultationText
+        );
+
+        consultationBox.appendChild(
+            consultationButton
+        );
+
+        resultWrapper.appendChild(
+            consultationBox
+        );
+
+    }
+
+    /* ==========================================
+       DISCLAIMER
+    ========================================== */
+
     const disclaimer = document.createElement("div");
 
     disclaimer.className = "result-disclaimer";
@@ -460,6 +558,10 @@ function renderResults(result) {
     disclaimer.appendChild(disclaimerText);
 
     resultWrapper.appendChild(disclaimer);
+
+    /* ==========================================
+       RETAKE ASSESSMENT
+    ========================================== */
 
     const restartButton = document.createElement("button");
 
@@ -482,7 +584,7 @@ function renderResults(result) {
 }
 
 /* ==========================================
-   RESTART ASSESSMENT
+RESTART ASSESSMENT
 ========================================== */
 
 function restartAssessment() {
