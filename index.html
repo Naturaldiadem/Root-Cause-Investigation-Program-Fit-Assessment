@@ -1,293 +1,126 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Natural Diadem | Program Fit Assessment</title>
-
-    <!-- Fonts -->
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
-
-    <!-- CSS -->
-
-    <link rel="stylesheet" href="style.css">
-
-</head>
-
-<body>
-
-<div class="container">
-
-    <!-- ===========================
-            HERO
-    ============================ -->
-
-    <header class="hero">
-
-        <img
-            src="assets/logo.png"
-            alt="Natural Diadem Logo"
-            class="logo">
-
-        <h1>
-
-            Root Cause Investigation
-
-            <span>Program Fit Assessment</span>
-
-        </h1>
-
-        <p class="hero-text">
-
-            Helping women uncover and eliminate the root causes of
-            hair loss, scalp flakes, scalp tenderness, and changes
-            in hair health.
-
-        </p>
-
-    </header>
-
-    <!-- ===========================
-            WELCOME CARD
-    ============================ -->
-
-    <section id="welcome-screen" class="card">
-
-        <h2>
-
-            Not Sure If This Program Is Right For You?
-
-        </h2>
-
-        <p>
-
-            This short assessment is designed to help you determine
-            whether the Root Cause Investigation Program may be
-            the appropriate next step based on your goals,
-            current concerns, and expectations.
-
-        </p>
-
-        <div class="info-box">
-
-            <ul>
-
-                <li>✔ Takes approximately 3–5 minutes</li>
-
-                <li>✔ Free to complete</li>
-
-                <li>✔ Personalized recommendation</li>
-
-                <li>✔ No obligation to apply</li>
-
-            </ul>
-
-        </div>
-
-        <div class="notice">
-
-            <h3>
-
-                Before You Begin
-
-            </h3>
-
-            <p>
-
-                This assessment is not intended to diagnose,
-                treat, or replace medical advice.
-
-            </p>
-
-            <p>
-
-                Instead, it helps determine whether the
-                Root Cause Investigation Program appears
-                to be an appropriate next step based on
-                your responses.
-
-            </p>
-
-            <p>
-
-                There are no right or wrong answers.
-
-                Simply answer each question honestly.
-
-            </p>
-
-        </div>
-
-        <button id="begin-btn">
-
-            Begin Assessment
-
-        </button>
-
-    </section>
-
-    <!-- ===========================
-          PROGRESS
-    ============================ -->
-
-    <section id="assessment" class="hidden">
-
-        <div class="progress-wrapper">
-
-            <div class="progress-top">
-
-                <div>
-
-                    <small id="section-label">
-
-                        Section 1 of 4
-
-                    </small>
-
-                    <h3 id="section-title">
-
-                        Your Hair & Scalp
-
-                    </h3>
-
-                </div>
-
-                <div id="question-number">
-
-                    Question 1 of 9
-
-                </div>
-
-            </div>
-
-            <div class="progress-bar">
-
-                <div
-                    id="progress-fill"
-                    class="progress-fill">
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <!-- QUESTION GOES HERE -->
-
-        <div id="question-container">
-
-        </div>
-
-        <!-- NAVIGATION -->
-
-        <div class="navigation">
-
-            <button
-                id="previous-btn"
-                class="secondary">
-
-                Previous
-
-            </button>
-
-            <button
-                id="next-btn">
-
-                Next
-
-            </button>
-
-        </div>
-
-    </section>
-
-    <!-- ===========================
-           REVIEW
-    ============================ -->
-
-    <section
-        id="review-screen"
-        class="card hidden">
-
-        <h2>
-
-            Review Your Responses
-
-        </h2>
-
-        <p>
-
-            You've completed the assessment.
-
-            Please review your answers before
-            submitting.
-
-        </p>
-
-        <div id="review-container">
-
-        </div>
-
-        <div class="navigation">
-
-            <button
-                id="edit-btn"
-                class="secondary">
-
-                Back
-
-            </button>
-
-            <button
-                id="submit-btn">
-
-                Submit Assessment
-
-            </button>
-
-        </div>
-
-    </section>
-
-    <!-- ===========================
-            RESULTS
-    ============================ -->
-
-    <section
-        id="results-screen"
-        class="card hidden">
-
-        <div id="results-content">
-
-        </div>
-
-    </section>
-
-</div>
-
 <!-- ===========================
-      JAVASCRIPT
-=========================== -->
+        WELCOME CARD
+============================ -->
 
-<script src="questions.js"></script>
+<section id="welcome-screen" class="card">
 
-<script src="script.js"></script>
+    <h2>
+        Not Sure If This Program Is Right For You?
+    </h2>
 
-<script src="render.js"></script>
+    <p>
+        This short assessment is designed to help you determine
+        whether the Root Cause Investigation Program may be
+        the appropriate next step based on your goals,
+        current concerns, and expectations.
+    </p>
 
-<script src="navigation.js"></script>
+    <div class="info-box">
 
-<script src="review.js"></script>
+        <ul>
+            <li>✔ Takes approximately 3–5 minutes</li>
+            <li>✔ Free to complete</li>
+            <li>✔ Personalized recommendation</li>
+            <li>✔ No obligation to apply</li>
+        </ul>
 
-<script src="results.js"></script>
-</body>
+    </div>
 
-</html>
+    <div class="notice">
+
+        <h3>
+            Before You Begin
+        </h3>
+
+        <p>
+            This assessment is not intended to diagnose,
+            treat, or replace medical advice.
+        </p>
+
+        <p>
+            Instead, it helps determine whether the
+            Root Cause Investigation Program appears
+            to be an appropriate next step based on
+            your responses.
+        </p>
+
+        <p>
+            There are no right or wrong answers.
+            Simply answer each question honestly.
+        </p>
+
+    </div>
+
+    <!-- ===========================
+          CONTACT INFORMATION
+    ============================ -->
+
+    <div class="contact-information">
+
+        <h3>
+            Your Information
+        </h3>
+
+        <p>
+            Enter your information below so your assessment
+            can be connected to your response.
+        </p>
+
+        <div class="form-group">
+
+            <label for="first-name">
+                First Name
+            </label>
+
+            <input
+                type="text"
+                id="first-name"
+                name="firstName"
+                autocomplete="given-name"
+                required>
+
+        </div>
+
+        <div class="form-group">
+
+            <label for="last-name">
+                Last Name
+            </label>
+
+            <input
+                type="text"
+                id="last-name"
+                name="lastName"
+                autocomplete="family-name"
+                required>
+
+        </div>
+
+        <div class="form-group">
+
+            <label for="email">
+                Email Address
+            </label>
+
+            <input
+                type="email"
+                id="email"
+                name="email"
+                autocomplete="email"
+                required>
+
+        </div>
+
+        <p
+            id="contact-validation-message"
+            class="validation-message hidden"
+            role="alert">
+        </p>
+
+    </div>
+
+    <button id="begin-btn">
+        Begin Assessment
+    </button>
+
+</section>
