@@ -1,23 +1,28 @@
 /* ==========================================
-   NATURAL DIADEM
-   PROGRAM FIT ASSESSMENT
-   SCRIPT.JS
+NATURAL DIADEM
+PROGRAM FIT ASSESSMENT
+SCRIPT.JS
 ========================================== */
 
 "use strict";
 
 /* ==========================================
-   ASSESSMENT STATE
+ASSESSMENT STATE
 ========================================== */
 
 const assessmentState = {
     currentQuestionIndex: 0,
     answers: {},
+    contact: {
+        firstName: "",
+        lastName: "",
+        email: ""
+    },
     submitted: false
 };
 
 /* ==========================================
-   DOM ELEMENTS
+DOM ELEMENTS
 ========================================== */
 
 const welcomeScreen = document.getElementById("welcome-screen");
@@ -41,7 +46,17 @@ const questionNumber = document.getElementById("question-number");
 const progressFill = document.getElementById("progress-fill");
 
 /* ==========================================
-   SCREEN MANAGEMENT
+CONTACT INFORMATION
+========================================== */
+
+const firstNameInput = document.getElementById("first-name");
+const lastNameInput = document.getElementById("last-name");
+const emailInput = document.getElementById("email");
+const contactValidationMessage =
+    document.getElementById("contact-validation-message");
+
+/* ==========================================
+SCREEN MANAGEMENT
 ========================================== */
 
 function hideAllScreens() {
@@ -76,7 +91,7 @@ function showResultsScreen() {
 }
 
 /* ==========================================
-   GENERAL HELPERS
+GENERAL HELPERS
 ========================================== */
 
 function scrollToTop() {
@@ -138,7 +153,55 @@ function getSectionQuestionPosition(questionIndex) {
 }
 
 /* ==========================================
-   ANSWER VALIDATION
+CONTACT VALIDATION
+========================================== */
+
+function isValidEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+function validateContactInformation() {
+    const firstName = firstNameInput.value.trim();
+    const lastName = lastNameInput.value.trim();
+    const email = emailInput.value.trim();
+
+    clearContactValidationMessage();
+
+    if (!firstName || !lastName || !email) {
+        showContactValidationMessage(
+            "Please enter your first name, last name, and email address."
+        );
+
+        return false;
+    }
+
+    if (!isValidEmail(email)) {
+        showContactValidationMessage(
+            "Please enter a valid email address."
+        );
+
+        return false;
+    }
+
+    assessmentState.contact.firstName = firstName;
+    assessmentState.contact.lastName = lastName;
+    assessmentState.contact.email = email;
+
+    return true;
+}
+
+function showContactValidationMessage(message) {
+    contactValidationMessage.textContent = message;
+    contactValidationMessage.classList.remove("hidden");
+}
+
+function clearContactValidationMessage() {
+    contactValidationMessage.textContent = "";
+    contactValidationMessage.classList.add("hidden");
+}
+
+/* ==========================================
+ANSWER VALIDATION
 ========================================== */
 
 function validateCurrentQuestion() {
@@ -181,10 +244,14 @@ function clearValidationMessage() {
 }
 
 /* ==========================================
-   ASSESSMENT START
+ASSESSMENT START
 ========================================== */
 
 function beginAssessment() {
+    if (!validateContactInformation()) {
+        return;
+    }
+
     assessmentState.currentQuestionIndex = 0;
     assessmentState.answers = {};
     assessmentState.submitted = false;
@@ -197,11 +264,12 @@ function beginAssessment() {
 }
 
 /* ==========================================
-   KEYBOARD ACCESSIBILITY
+KEYBOARD ACCESSIBILITY
 ========================================== */
 
 function handleKeyboardNavigation(event) {
     const activeElement = document.activeElement;
+
     const isInputFocused =
         activeElement &&
         (
@@ -230,13 +298,16 @@ function handleKeyboardNavigation(event) {
 }
 
 /* ==========================================
-   INITIALIZATION
+INITIALIZATION
 ========================================== */
 
 function initializeAssessment() {
     showWelcomeScreen();
 
-    beginButton.addEventListener("click", beginAssessment);
+    beginButton.addEventListener(
+        "click",
+        beginAssessment
+    );
 
     document.addEventListener(
         "keydown",
