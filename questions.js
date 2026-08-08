@@ -275,6 +275,30 @@ section:4,
 
 sectionTitle:"Your Next Step",
 
+title:"Do you have HSA or FSA funds that you would like to use toward eligible investigation resources?",
+
+type:"radio",
+
+options:[
+
+"Yes",
+
+"No",
+
+"I'm not sure"
+
+]
+
+},
+
+{
+
+id:10,
+
+section:4,
+
+sectionTitle:"Your Next Step",
+
 title:"Which statement best describes you today?",
 
 type:"radio",
