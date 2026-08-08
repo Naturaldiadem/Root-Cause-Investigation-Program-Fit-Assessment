@@ -1,20 +1,20 @@
 /* ==========================================
-NATURAL DIADEM
-PROGRAM FIT ASSESSMENT
-REVIEW.JS
+   NATURAL DIADEM
+   PROGRAM FIT ASSESSMENT
+   REVIEW.JS
 ========================================== */
 
 "use strict";
 
 /* ==========================================
-GOOGLE SHEETS CONNECTION
+   GOOGLE SHEETS CONNECTION
 ========================================== */
 
 const GOOGLE_SHEETS_WEB_APP_URL =
-"https://script.google.com/macros/s/AKfycbxe7yxPq9CxgyuU3cH4Nx9VJ-Zl4gngKmYMkGFyau6sLLhySrS7NmvtnoWR6ndk9n-y/exec";
+    "https://script.google.com/macros/s/AKfycby3FeaD70dZmdcD-v2PsNzQ41o7HQDhfOBF0ppEV1foEVVJeqF1Cgj5d3sa0Ifin1fY/exec";
 
 /* ==========================================
-REVIEW RENDERING
+   REVIEW RENDERING
 ========================================== */
 
 function renderReview() {
@@ -26,10 +26,11 @@ function renderReview() {
         questionIndex
     ) {
 
-        const reviewItem = createReviewItem(
-            question,
-            questionIndex
-        );
+        const reviewItem =
+            createReviewItem(
+                question,
+                questionIndex
+            );
 
         reviewContainer.appendChild(
             reviewItem
@@ -40,7 +41,7 @@ function renderReview() {
 }
 
 /* ==========================================
-REVIEW ITEM
+   REVIEW ITEM
 ========================================== */
 
 function createReviewItem(
@@ -158,10 +159,11 @@ function createReviewItem(
     );
 
     return reviewItem;
+
 }
 
 /* ==========================================
-PREPARE SHEET DATA
+   PREPARE GOOGLE SHEET DATA
 ========================================== */
 
 function createSubmissionData(result) {
@@ -171,34 +173,49 @@ function createSubmissionData(result) {
         submittedAt:
             new Date().toISOString(),
 
-        firstName:
-            assessmentState.contact.firstName || "",
-
-        lastName:
-            assessmentState.contact.lastName || "",
-
-        email:
-            assessmentState.contact.email || "",
-
         answers: {
-            "1": getAnswer(1) || "",
-            "2": getAnswer(2) || "",
-            "3": getAnswer(3) || "",
-            "4": getAnswer(4) || "",
-            "5": getAnswer(5) || "",
-            "6": getAnswer(6) || "",
-            "7": getAnswer(7) || "",
-            "8": getAnswer(8) || "",
-            "9": getAnswer(9) || ""
+
+            "1":
+                getAnswer(1) || "",
+
+            "2":
+                getAnswer(2) || "",
+
+            "3":
+                getAnswer(3) || "",
+
+            "4":
+                getAnswer(4) || "",
+
+            "5":
+                getAnswer(5) || "",
+
+            "6":
+                getAnswer(6) || "",
+
+            "7":
+                getAnswer(7) || "",
+
+            "8":
+                getAnswer(8) || "",
+
+            "9":
+                getAnswer(9) || "",
+
+            "10":
+                getAnswer(10) || ""
+
         },
 
         result:
-            result && result.title
+            result &&
+            result.title
                 ? result.title
                 : "",
 
         resultKey:
-            result && result.key
+            result &&
+            result.key
                 ? result.key
                 : ""
 
@@ -207,7 +224,7 @@ function createSubmissionData(result) {
 }
 
 /* ==========================================
-SEND TO GOOGLE SHEETS
+   SEND TO GOOGLE SHEETS
 ========================================== */
 
 async function sendToGoogleSheets(
@@ -219,19 +236,23 @@ async function sendToGoogleSheets(
         await fetch(
             GOOGLE_SHEETS_WEB_APP_URL,
             {
+
                 method: "POST",
 
                 mode: "no-cors",
 
                 headers: {
+
                     "Content-Type":
                         "text/plain;charset=utf-8"
+
                 },
 
                 body:
                     JSON.stringify(
                         submissionData
                     )
+
             }
         );
 
@@ -247,21 +268,26 @@ async function sendToGoogleSheets(
         return false;
 
     }
+
 }
 
 /* ==========================================
-SUBMISSION
+   SUBMIT ASSESSMENT
 ========================================== */
 
 async function submitAssessment() {
 
-    if (assessmentState.submitted) {
+    if (
+        assessmentState.submitted
+    ) {
         return;
     }
 
-    assessmentState.submitted = true;
+    assessmentState.submitted =
+        true;
 
-    submitButton.disabled = true;
+    submitButton.disabled =
+        true;
 
     submitButton.textContent =
         "Submitting...";
@@ -285,7 +311,9 @@ async function submitAssessment() {
             calculateAssessmentResult();
 
         const submissionData =
-            createSubmissionData(result);
+            createSubmissionData(
+                result
+            );
 
         await sendToGoogleSheets(
             submissionData
@@ -298,7 +326,9 @@ async function submitAssessment() {
             "function"
         ) {
 
-            renderResults(result);
+            renderResults(
+                result
+            );
 
         }
 
@@ -309,9 +339,11 @@ async function submitAssessment() {
             error
         );
 
-        assessmentState.submitted = false;
+        assessmentState.submitted =
+            false;
 
-        submitButton.disabled = false;
+        submitButton.disabled =
+            false;
 
         submitButton.textContent =
             "Submit Assessment";
@@ -323,7 +355,7 @@ async function submitAssessment() {
 }
 
 /* ==========================================
-SUBMISSION ERROR
+   SUBMISSION ERROR
 ========================================== */
 
 function showSubmissionError() {
@@ -354,7 +386,7 @@ function showSubmissionError() {
 }
 
 /* ==========================================
-CLEAR SUBMISSION ERROR
+   CLEAR SUBMISSION ERROR
 ========================================== */
 
 function clearSubmissionError() {
@@ -364,14 +396,18 @@ function clearSubmissionError() {
             "submission-error"
         );
 
-    if (existingError) {
+    if (
+        existingError
+    ) {
+
         existingError.remove();
+
     }
 
 }
 
 /* ==========================================
-INITIALIZATION
+   INITIALIZATION
 ========================================== */
 
 function initializeReview() {
