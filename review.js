@@ -10,7 +10,7 @@
 ========================================== */
 
 const GOOGLE_SHEETS_WEB_APP_URL =
-    "https://script.google.com/macros/s/AKfycbznKZC9EpdQG61dVGZZAKRg9hNZCwPwFjcF_4X74981S5dNsIBAmHLYapfbw9PZj6TC/exec";
+    "https://script.google.com/macros/s/AKfycbxe7yxPq9CxgyuU3cH4Nx9VJ-Zl4gngKmYMkGFyau6sLLhySrS7NmvtnoWR6ndk9n-y/exec";
 
 /* ==========================================
    REVIEW RENDERING
