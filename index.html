@@ -1,4 +1,125 @@
-<div class="form-group">
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Natural Diadem | Program Fit Assessment</title>
+
+    <!-- FONTS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,600;1,700&family=Lato:wght@300;400;700&display=swap"
+        rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css?v=4">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!-- HERO -->
+        <header class="hero">
+            <img
+                src="assets/logo.png"
+                alt="Natural Diadem Logo"
+                class="logo">
+
+            <h1>
+                Root Cause Investigation
+                <span>Program Fit <em>Assessment</em></span>
+            </h1>
+
+            <p class="hero-text">
+                Helping women uncover and address the root causes of
+                hair loss, scalp flakes, scalp tenderness, and changes
+                in hair health.
+            </p>
+        </header>
+
+        <!-- WELCOME CARD (PLUM SIGNATURE CONTAINER) -->
+        <section id="welcome-screen" class="card plum-card">
+
+            <div class="card-ribbon">
+                START HERE <span>| 3–5 Minute Assessment</span>
+            </div>
+
+            <h2>
+                Not Sure If This Program Is <em>Right For You?</em>
+            </h2>
+
+            <p class="card-lead">
+                This short assessment helps determine whether
+                <strong>The Crown of Your Dreams: Root Cause Investigation Program</strong>
+                is the right next step based on your symptoms, location, goals, and readiness.
+            </p>
+
+            <div class="info-box">
+                <ul>
+                    <li><span class="check-badge">✓</span> Takes approximately 3–5 minutes</li>
+                    <li><span class="check-badge">✓</span> Free to complete</li>
+                    <li><span class="check-badge">✓</span> Personalized next-step recommendation</li>
+                    <li><span class="check-badge">✓</span> No obligation to apply</li>
+                </ul>
+            </div>
+
+            <div class="notice">
+                <h3>Before You Begin</h3>
+                <p>
+                    This assessment is educational and is not intended to diagnose,
+                    treat, or replace medical advice.
+                </p>
+                <p>
+                    Because our 1:1 investigation includes functional lab kits and
+                    practitioner-grade products shipped directly to you, we also ask
+                    for your location so we can confirm shipping eligibility.
+                </p>
+            </div>
+
+            <!-- CONTACT & LOCATION INFORMATION -->
+            <div class="contact-information">
+                <h3>Your Information</h3>
+                <p>
+                    Enter your details below so your personalized recommendation
+                    and shipping eligibility can be connected to your responses.
+                </p>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="first-name">First Name</label>
+                        <input
+                            type="text"
+                            id="first-name"
+                            name="firstName"
+                            autocomplete="given-name"
+                            required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="last-name">Last Name</label>
+                        <input
+                            type="text"
+                            id="last-name"
+                            name="lastName"
+                            autocomplete="family-name"
+                            required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        autocomplete="email"
+                        required>
+                </div>
+
+                <div class="form-group">
                     <label for="country">Country / Territory</label>
                     <select id="country" name="country" autocomplete="country-name" required>
                         <option value="">Select your country or territory...</option>
@@ -35,3 +156,78 @@
                             required>
                     </div>
                 </div>
+
+                <p
+                    id="contact-validation-message"
+                    class="validation-message hidden"
+                    role="alert">
+                </p>
+            </div>
+
+            <button id="begin-btn" class="pill-cta">
+                <span>Begin Assessment</span>
+                <span class="btn-arrow">→</span>
+            </button>
+
+        </section>
+
+        <!-- ASSESSMENT -->
+        <section id="assessment" class="hidden">
+
+            <div class="progress-wrapper">
+                <div class="progress-top">
+                    <div>
+                        <small id="section-label">Section 1 of 4</small>
+                        <h3 id="section-title">Your Hair &amp; Scalp</h3>
+                    </div>
+                    <div id="question-number">Question 1 of 12</div>
+                </div>
+
+                <div class="progress-bar">
+                    <div id="progress-fill" class="progress-fill"></div>
+                </div>
+            </div>
+
+            <div id="question-container"></div>
+
+            <div class="navigation">
+                <button id="previous-btn" class="secondary">Previous</button>
+                <button id="next-btn">Next</button>
+            </div>
+
+        </section>
+
+        <!-- REVIEW -->
+        <section id="review-screen" class="card hidden">
+
+            <h2>Review Your <em>Responses</em></h2>
+            <p class="review-intro">
+                You've completed the assessment. Please review your answers before submitting.
+            </p>
+
+            <div id="review-container"></div>
+
+            <div class="navigation">
+                <button id="edit-btn" class="secondary">Back</button>
+                <button id="submit-btn">Submit Assessment</button>
+            </div>
+
+        </section>
+
+        <!-- RESULTS -->
+        <section id="results-screen" class="card hidden">
+            <div id="results-content"></div>
+        </section>
+
+    </div>
+
+    <!-- JAVASCRIPT -->
+    <script src="questions.js"></script>
+    <script src="script.js"></script>
+    <script src="render.js"></script>
+    <script src="navigation.js"></script>
+    <script src="review.js"></script>
+    <script src="results.js"></script>
+
+</body>
+</html>
