@@ -1,7 +1,6 @@
 /* ==========================================
    NATURAL DIADEM
-   PROGRAM FIT ASSESSMENT
-   REVIEW.JS
+   PROGRAM FIT ASSESSMENT — REVIEW.JS
 ========================================== */
 
 "use strict";
@@ -12,153 +11,72 @@
 
 const GOOGLE_SHEETS_WEB_APP_URL =
     "https://script.google.com/macros/s/AKfycbznKZC9EpdQG61dVGZZAKRg9hNZCwPwFjcF_4X74981S5dNsIBAmHLYapfbw9PZj6TC/exec";
+
 /* ==========================================
    REVIEW RENDERING
 ========================================== */
 
 function renderReview() {
-
     reviewContainer.innerHTML = "";
 
-    questions.forEach(function (
-        question,
-        questionIndex
-    ) {
-
-        const reviewItem =
-            createReviewItem(
-                question,
-                questionIndex
-            );
-
-        reviewContainer.appendChild(
-            reviewItem
-        );
-
+    questions.forEach(function (question, questionIndex) {
+        const reviewItem = createReviewItem(question, questionIndex);
+        reviewContainer.appendChild(reviewItem);
     });
-
 }
 
 /* ==========================================
    REVIEW ITEM
 ========================================== */
 
-function createReviewItem(
-    question,
-    questionIndex
-) {
+function createReviewItem(question, questionIndex) {
+    const reviewItem = document.createElement("div");
+    reviewItem.className = "review-item";
 
-    const reviewItem =
-        document.createElement("div");
+    const reviewHeader = document.createElement("div");
+    reviewHeader.className = "review-header";
 
-    reviewItem.className =
-        "review-item";
+    const reviewQuestion = document.createElement("h3");
+    reviewQuestion.className = "review-question";
+    reviewQuestion.textContent = question.title;
 
-    const reviewHeader =
-        document.createElement("div");
+    const editQuestionButton = document.createElement("button");
+    editQuestionButton.type = "button";
+    editQuestionButton.className = "review-edit-btn secondary";
+    editQuestionButton.textContent = "Edit";
 
-    reviewHeader.className =
-        "review-header";
+    editQuestionButton.addEventListener("click", function () {
+        editQuestion(questionIndex);
+    });
 
-    const reviewQuestion =
-        document.createElement("h3");
+    reviewHeader.appendChild(reviewQuestion);
+    reviewHeader.appendChild(editQuestionButton);
 
-    reviewQuestion.className =
-        "review-question";
+    const reviewAnswer = document.createElement("div");
+    reviewAnswer.className = "review-answer";
 
-    reviewQuestion.textContent =
-        question.title;
-
-    const editQuestionButton =
-        document.createElement("button");
-
-    editQuestionButton.type =
-        "button";
-
-    editQuestionButton.className =
-        "review-edit-btn secondary";
-
-    editQuestionButton.textContent =
-        "Edit";
-
-    editQuestionButton.addEventListener(
-        "click",
-        function () {
-
-            editQuestion(
-                questionIndex
-            );
-
-        }
-    );
-
-    reviewHeader.appendChild(
-        reviewQuestion
-    );
-
-    reviewHeader.appendChild(
-        editQuestionButton
-    );
-
-    const reviewAnswer =
-        document.createElement("div");
-
-    reviewAnswer.className =
-        "review-answer";
-
-    const answer =
-        getAnswer(question.id);
+    const answer = getAnswer(question.id);
 
     if (Array.isArray(answer)) {
+        const answerList = document.createElement("ul");
 
-        const answerList =
-            document.createElement("ul");
-
-        answer.forEach(function (
-            selectedAnswer
-        ) {
-
-            const answerItem =
-                document.createElement("li");
-
-            answerItem.textContent =
-                selectedAnswer;
-
-            answerList.appendChild(
-                answerItem
-            );
-
+        answer.forEach(function (selectedAnswer) {
+            const answerItem = document.createElement("li");
+            answerItem.textContent = selectedAnswer;
+            answerList.appendChild(answerItem);
         });
 
-        reviewAnswer.appendChild(
-            answerList
-        );
-
+        reviewAnswer.appendChild(answerList);
     } else {
-
-        const answerText =
-            document.createElement("p");
-
-        answerText.textContent =
-            answer ||
-            "No response selected.";
-
-        reviewAnswer.appendChild(
-            answerText
-        );
-
+        const answerText = document.createElement("p");
+        answerText.textContent = answer || "No response selected.";
+        reviewAnswer.appendChild(answerText);
     }
 
-    reviewItem.appendChild(
-        reviewHeader
-    );
-
-    reviewItem.appendChild(
-        reviewAnswer
-    );
+    reviewItem.appendChild(reviewHeader);
+    reviewItem.appendChild(reviewAnswer);
 
     return reviewItem;
-
 }
 
 /* ==========================================
@@ -166,108 +84,59 @@ function createReviewItem(
 ========================================== */
 
 function createSubmissionData(result) {
-
     return {
-
-        submittedAt:
-            new Date().toISOString(),
-
-        answers: {
-
-            "1":
-                getAnswer(1) || "",
-
-            "2":
-                getAnswer(2) || "",
-
-            "3":
-                getAnswer(3) || "",
-
-            "4":
-                getAnswer(4) || "",
-
-            "5":
-                getAnswer(5) || "",
-
-            "6":
-                getAnswer(6) || "",
-
-            "7":
-                getAnswer(7) || "",
-
-            "8":
-                getAnswer(8) || "",
-
-            "9":
-                getAnswer(9) || "",
-
-            "10":
-                getAnswer(10) || ""
-
+        submittedAt: new Date().toISOString(),
+        contact: {
+            firstName: assessmentState.contact.firstName || "",
+            lastName: assessmentState.contact.lastName || "",
+            email: assessmentState.contact.email || "",
+            country: assessmentState.contact.country || "",
+            region: assessmentState.contact.region || "",
+            postalCode: assessmentState.contact.postalCode || ""
         },
-
-        result:
-            result &&
-            result.title
-                ? result.title
-                : "",
-
-        resultKey:
-            result &&
-            result.key
-                ? result.key
-                : ""
-
+        answers: {
+            "1": getAnswer(1) || "",
+            "2": getAnswer(2) || "",
+            "3": getAnswer(3) || "",
+            "4": getAnswer(4) || "",
+            "5": getAnswer(5) || "",
+            "6": getAnswer(6) || "",
+            "7": getAnswer(7) || "",
+            "8": getAnswer(8) || "",
+            "9": getAnswer(9) || "",
+            "10": getAnswer(10) || "",
+            "11": getAnswer(11) || "",
+            "12": getAnswer(12) || ""
+        },
+        result: result && result.title ? result.title : "",
+        resultKey: result && result.key ? result.key : ""
     };
-
 }
 
 /* ==========================================
    SEND TO GOOGLE SHEETS
 ========================================== */
 
-async function sendToGoogleSheets(
-    submissionData
-) {
-
+async function sendToGoogleSheets(submissionData) {
     try {
-
-        await fetch(
-            GOOGLE_SHEETS_WEB_APP_URL,
-            {
-
-                method: "POST",
-
-                mode: "no-cors",
-
-                headers: {
-
-                    "Content-Type":
-                        "text/plain;charset=utf-8"
-
-                },
-
-                body:
-                    JSON.stringify(
-                        submissionData
-                    )
-
-            }
-        );
+        await fetch(GOOGLE_SHEETS_WEB_APP_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: {
+                "Content-Type": "text/plain;charset=utf-8"
+            },
+            body: JSON.stringify(submissionData)
+        });
 
         return true;
-
     } catch (error) {
-
         console.error(
             "The assessment response could not be sent to Google Sheets.",
             error
         );
 
         return false;
-
     }
-
 }
 
 /* ==========================================
@@ -275,82 +144,40 @@ async function sendToGoogleSheets(
 ========================================== */
 
 async function submitAssessment() {
-
-    if (
-        assessmentState.submitted
-    ) {
+    if (assessmentState.submitted) {
         return;
     }
 
-    assessmentState.submitted =
-        true;
-
-    submitButton.disabled =
-        true;
-
-    submitButton.textContent =
-        "Submitting...";
+    assessmentState.submitted = true;
+    submitButton.disabled = true;
+    submitButton.textContent = "Submitting...";
 
     clearSubmissionError();
 
     try {
-
-        if (
-            typeof calculateAssessmentResult !==
-            "function"
-        ) {
-
-            throw new Error(
-                "The assessment result function is unavailable."
-            );
-
+        if (typeof calculateAssessmentResult !== "function") {
+            throw new Error("The assessment result function is unavailable.");
         }
 
-        const result =
-            calculateAssessmentResult();
+        const result = calculateAssessmentResult();
+        const submissionData = createSubmissionData(result);
 
-        const submissionData =
-            createSubmissionData(
-                result
-            );
-
-        await sendToGoogleSheets(
-            submissionData
-        );
+        await sendToGoogleSheets(submissionData);
 
         showResultsScreen();
 
-        if (
-            typeof renderResults ===
-            "function"
-        ) {
-
-            renderResults(
-                result
-            );
-
+        if (typeof renderResults === "function") {
+            renderResults(result);
         }
-
     } catch (error) {
+        console.error("The assessment could not be submitted.", error);
 
-        console.error(
-            "The assessment could not be submitted.",
-            error
-        );
-
-        assessmentState.submitted =
-            false;
-
-        submitButton.disabled =
-            false;
-
-        submitButton.textContent =
-            "Submit Assessment";
+        assessmentState.submitted = false;
+        submitButton.disabled = false;
+        submitButton.textContent = "Submit Assessment";
 
         showSubmissionError();
-
     }
-
 }
 
 /* ==========================================
@@ -358,30 +185,16 @@ async function submitAssessment() {
 ========================================== */
 
 function showSubmissionError() {
-
     clearSubmissionError();
 
-    const errorMessage =
-        document.createElement("p");
-
-    errorMessage.id =
-        "submission-error";
-
-    errorMessage.className =
-        "validation-message";
-
-    errorMessage.setAttribute(
-        "role",
-        "alert"
-    );
-
+    const errorMessage = document.createElement("p");
+    errorMessage.id = "submission-error";
+    errorMessage.className = "validation-message";
+    errorMessage.setAttribute("role", "alert");
     errorMessage.textContent =
         "Something went wrong while processing your assessment. Please try again.";
 
-    reviewContainer.appendChild(
-        errorMessage
-    );
-
+    reviewContainer.appendChild(errorMessage);
 }
 
 /* ==========================================
@@ -389,20 +202,11 @@ function showSubmissionError() {
 ========================================== */
 
 function clearSubmissionError() {
+    const existingError = document.getElementById("submission-error");
 
-    const existingError =
-        document.getElementById(
-            "submission-error"
-        );
-
-    if (
-        existingError
-    ) {
-
+    if (existingError) {
         existingError.remove();
-
     }
-
 }
 
 /* ==========================================
@@ -410,15 +214,7 @@ function clearSubmissionError() {
 ========================================== */
 
 function initializeReview() {
-
-    submitButton.addEventListener(
-        "click",
-        submitAssessment
-    );
-
+    submitButton.addEventListener("click", submitAssessment);
 }
 
-document.addEventListener(
-    "DOMContentLoaded",
-    initializeReview
-);
+document.addEventListener("DOMContentLoaded", initializeReview);
