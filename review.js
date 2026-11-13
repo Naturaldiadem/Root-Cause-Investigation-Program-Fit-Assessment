@@ -6,7 +6,7 @@
 "use strict";
 
 const GOOGLE_SHEETS_WEB_APP_URL =
-    "https://script.google.com/macros/s/AKfycbxe7yxPq9CxgyuU3cH4Nx9VJ-Zl4gngKmYMkGFyau6sLLhySrS7NmvtnoWR6ndk9n-y/exec";
+    "https://script.google.com/macros/s/AKfycbwDkj26DCYlXfCou-CVk8FfJwN48Y7oOGW57FSFXFcM6jRKWrRlz8ELb8A9y0Atmb37/exec"
 
 function renderReview() {
     reviewContainer.innerHTML = "";
