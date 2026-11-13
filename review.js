@@ -8,8 +8,8 @@
 /* ==========================================
    GOOGLE SHEETS CONNECTION
 ========================================== */
-
-https://script.google.com/macros/s/AKfycbznKZC9EpdQG61dVGZZAKRg9hNZCwPwFjcF_4X74981S5dNsIBAmHLYapfbw9PZj6TC/exec
+const GOOGLE_SHEETS_WEB_APP_URL =
+    https://script.google.com/macros/s/AKfycbznKZC9EpdQG61dVGZZAKRg9hNZCwPwFjcF_4X74981S5dNsIBAmHLYapfbw9PZj6TC/exec
 
 /* ==========================================
    REVIEW RENDERING
