@@ -5,15 +5,8 @@
 
 "use strict";
 
-/* ==========================================
-   GOOGLE SHEETS CONNECTION
-========================================== */
 const GOOGLE_SHEETS_WEB_APP_URL =
-    https://script.google.com/macros/s/AKfycbznKZC9EpdQG61dVGZZAKRg9hNZCwPwFjcF_4X74981S5dNsIBAmHLYapfbw9PZj6TC/exec
-
-/* ==========================================
-   REVIEW RENDERING
-========================================== */
+    "https://script.google.com/macros/s/AKfycbxe7yxPq9CxgyuU3cH4Nx9VJ-Zl4gngKmYMkGFyau6sLLhySrS7NmvtnoWR6ndk9n-y/exec";
 
 function renderReview() {
     reviewContainer.innerHTML = "";
@@ -23,10 +16,6 @@ function renderReview() {
         reviewContainer.appendChild(reviewItem);
     });
 }
-
-/* ==========================================
-   REVIEW ITEM
-========================================== */
 
 function createReviewItem(question, questionIndex) {
     const reviewItem = document.createElement("div");
@@ -78,10 +67,6 @@ function createReviewItem(question, questionIndex) {
     return reviewItem;
 }
 
-/* ==========================================
-   PREPARE GOOGLE SHEET DATA
-========================================== */
-
 function createSubmissionData(result) {
     return {
         submittedAt: new Date().toISOString(),
@@ -112,10 +97,6 @@ function createSubmissionData(result) {
     };
 }
 
-/* ==========================================
-   SEND TO GOOGLE SHEETS
-========================================== */
-
 async function sendToGoogleSheets(submissionData) {
     try {
         await fetch(GOOGLE_SHEETS_WEB_APP_URL, {
@@ -129,18 +110,10 @@ async function sendToGoogleSheets(submissionData) {
 
         return true;
     } catch (error) {
-        console.error(
-            "The assessment response could not be sent to Google Sheets.",
-            error
-        );
-
+        console.error("Google Sheets submission error:", error);
         return false;
     }
 }
-
-/* ==========================================
-   SUBMIT ASSESSMENT
-========================================== */
 
 async function submitAssessment() {
     if (assessmentState.submitted) {
@@ -169,7 +142,7 @@ async function submitAssessment() {
             renderResults(result);
         }
     } catch (error) {
-        console.error("The assessment could not be submitted.", error);
+        console.error("Assessment submission error:", error);
 
         assessmentState.submitted = false;
         submitButton.disabled = false;
@@ -178,10 +151,6 @@ async function submitAssessment() {
         showSubmissionError();
     }
 }
-
-/* ==========================================
-   SUBMISSION ERROR
-========================================== */
 
 function showSubmissionError() {
     clearSubmissionError();
@@ -196,21 +165,12 @@ function showSubmissionError() {
     reviewContainer.appendChild(errorMessage);
 }
 
-/* ==========================================
-   CLEAR SUBMISSION ERROR
-========================================== */
-
 function clearSubmissionError() {
     const existingError = document.getElementById("submission-error");
-
     if (existingError) {
         existingError.remove();
     }
 }
-
-/* ==========================================
-   INITIALIZATION
-========================================== */
 
 function initializeReview() {
     submitButton.addEventListener("click", submitAssessment);
